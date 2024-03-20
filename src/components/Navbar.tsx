@@ -12,7 +12,6 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
 const Navbar = async () => {
   const { isAuthenticated } = getKindeServerSession();
-  console.log(await isAuthenticated());
 
   return (
     <nav className="sticky inset-x-0 top-0 z-30 h-14 w-full border-b border-slate-200 bg-slate-100/75 backdrop-blur-lg transition-all">

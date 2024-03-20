@@ -13,10 +13,10 @@ export default function Home() {
             <FileText
               strokeWidth="1px"
               size="lg"
-              className="-rotate-[15deg] text-gray-900 opacity-10 "
+              className="-rotate-[15deg] text-slate-900 opacity-10 "
             />
           </div>
-          <div className="mx-auto mb-4  max-w-fit items-center justify-center space-x-2 overflow-hidden rounded-full border border-gray-200  px-7 py-2 shadow-md backdrop-blur transition-all hover:border-gray-300 ">
+          <div className="mx-auto mb-4  max-w-fit items-center justify-center space-x-2 overflow-hidden rounded-full border border-slate-200  px-7 py-2 shadow-md backdrop-blur transition-all hover:border-slate-300 ">
             <p className="text-sm font-semibold text-white">
               doc.AI is now public
             </p>
@@ -46,10 +46,10 @@ export default function Home() {
         <div className="mx-auto mb-32 mt-32 max-w-7xl sm:mt-56">
           <div className="mb-12 px-3 lg:px-8">
             <div className="mx-auto max-w-3xl text-left sm:text-center">
-              <h2 className="mt-2 text-3xl font-bold text-gray-900 sm:text-5xl">
+              <h2 className="mt-2 text-3xl font-bold text-slate-900 sm:text-5xl">
                 Start chatting in seconds
               </h2>
-              <p className="mt-5 text-lg text-gray-600">
+              <p className="mt-5 text-lg text-slate-600">
                 Are you in hurry to skim your document, searching for specific
                 info and so on? Chat with your PDF files to ravel out the
                 answers, has never been easier than using doc.AI! 🧑‍💻

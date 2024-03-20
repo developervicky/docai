@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -17,34 +18,12 @@
     --muted-foreground: 240 3.8% 46.1%;
     --accent: 240 4.8% 95.9%;
     --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 86% 97%;
+    --destructive-foreground: 0 74% 42%;
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
     --ring: 142.1 76.2% 36.3%;
     --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 20 14.3% 4.1%;
-    --foreground: 0 0% 95%;
-    --card: 24 9.8% 10%;
-    --card-foreground: 0 0% 95%;
-    --popover: 0 0% 9%;
-    --popover-foreground: 0 0% 95%;
-    --primary: 142.1 70.6% 45.3%;
-    --primary-foreground: 144.9 80.4% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 15%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 12 6.5% 15.1%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 85.7% 97.3%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 142.4 71.8% 29.2%;
   }
 }
 
@@ -53,11 +32,28 @@
     @apply border-border;
   }
   body {
-    @apply text-foreground bg-slate-100;
+    @apply !bg-slate-100 !text-foreground;
   }
   .hero_gradient {
     background-color: #22c55e;
     background-image: linear-gradient(135deg, #22c55e 0%, #16a085 100%);
   }
-}
+  .scrollbar-w-2::-webkit-scrollbar {
+    width: 0.25rem;
+    height: 0.25rem;
+  }
 
+  .scrollbar-track-green-lighter::-webkit-scrollbar-track {
+    --bg-opacity: 0.5;
+    background-color: #00000015;
+  }
+
+  .scrollbar-thumb-green::-webkit-scrollbar-thumb {
+    --bg-opacity: 0.5;
+    background-color: #13131374;
+  }
+
+  .scrollbar-thumb-rounded::-webkit-scrollbar-thumb {
+    border-radius: 7px;
+  }
+}

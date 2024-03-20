@@ -3,6 +3,10 @@ import { IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
+import Providers from "./components/Providers";
+import "react-loading-skeleton/dist/skeleton.css";
+import { Toaster } from "@/components/ui/toaster";
+import "simplebar-react/dist/simplebar.min.css";
 
 const ibmMono = IBM_Plex_Mono({
   subsets: ["latin"],
@@ -22,10 +26,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn("min-h-screen antialiased", ibmMono.className)}>
-        <Navbar />
-        {children}
-      </body>
+      <Providers>
+        <body
+          
+          className={cn("min-h-screen antialiased", ibmMono.className)}
+        >
+          <Navbar />
+          {children}
+          <Toaster />
+        </body>
+      </Providers>
     </html>
   );
 }
