@@ -57,3 +57,12 @@
     border-radius: 7px;
   }
 }
+::-webkit-scrollbar {
+  width: 7px;
+}
+::-webkit-scrollbar-track {
+  background: white;
+}
+::-webkit-scrollbar-thumb {
+  background: #16a34a;
+}
