@@ -11,13 +11,15 @@ import { useToast } from "@/components/ui/use-toast";
 import { trpc } from "@/app/_trpc/client";
 import { useRouter } from "next/navigation";
 
-const UploadDropzone = () => {
+const UploadDropzone = ({ isSubscribed }: { isSubscribed: boolean }) => {
   const router = useRouter();
   const [uploading, setUploading] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const { toast } = useToast();
 
-  const { startUpload } = useUploadThing("pdfUploader");
+  const { startUpload } = useUploadThing(
+    isSubscribed ? "proPlanUploader" : "freePlanUploader",
+  );
 
   const { mutate: startPolling } = trpc.getFile.useMutation({
     onSuccess: (file) => {
@@ -93,7 +95,7 @@ const UploadDropzone = () => {
                   drop
                 </p>
                 <p className="mb-2 text-center text-xs text-slate-500">
-                  PDF (up to 4MB)
+                  PDF (up to {isSubscribed ? "16" : "4"}MB)
                 </p>
                 <p className="mb-2 max-w-sm text-center text-xs text-slate-400">
                   If your browser does not opening the file explorer. Don&apos;t
@@ -141,7 +143,7 @@ const UploadDropzone = () => {
   );
 };
 
-const UploadButton = () => {
+const UploadButton = ({ isSubscribed }: { isSubscribed: boolean }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
@@ -157,7 +159,7 @@ const UploadButton = () => {
         <Button>Upload PDF</Button>
       </DialogTrigger>
       <DialogContent>
-        <UploadDropzone />
+        <UploadDropzone isSubscribed={isSubscribed} />
       </DialogContent>
     </Dialog>
   );

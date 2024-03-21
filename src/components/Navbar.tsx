@@ -10,9 +10,12 @@ import {
 import { ArrowRight, LogOut } from "lucide-react";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import UserAccountNav from "./UserAccountNav";
+import MobileNav from "./MobileNav";
+import { getUserSubscriptionPlan } from "@/lib/stripe";
 
 const Navbar = async () => {
   const { getUser } = getKindeServerSession();
+  const subscriptionPlan = await getUserSubscriptionPlan();
   const user = await getUser();
 
   return (
@@ -28,7 +31,8 @@ const Navbar = async () => {
               className="ml-2 mt-1.5 object-cover"
             />
           </Link>
-          {/* {todo:mobilenav} */}
+
+          <MobileNav isAuth={!!user} subscriptionPlan={subscriptionPlan} />
 
           <div className="hidden items-center space-x-4 sm:flex">
             {!user ? (
