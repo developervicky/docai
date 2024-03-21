@@ -7,8 +7,9 @@ import {
   LogoutLink,
   RegisterLink,
 } from "@kinde-oss/kinde-auth-nextjs/components";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, LogOut } from "lucide-react";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import UserAccountNav from "./UserAccountNav";
 
 const Navbar = async () => {
   const { getUser } = getKindeServerSession();
@@ -80,21 +81,39 @@ const Navbar = async () => {
                 >
                   Dashboard
                 </Link>
-                <UserAccountNav />
+                <Link
+                  href="/pricings"
+                  className={buttonVariants({
+                    variant: "ghost",
+                    size: "sm",
+                    className:
+                      "transition-all hover:!bg-green-100  hover:outline hover:outline-1 hover:outline-green-600/20 ",
+                  })}
+                >
+                  Pricing
+                </Link>
+
+                <UserAccountNav
+                  name={
+                    !user.given_name || !user.family_name
+                      ? "Your account"
+                      : `${user.given_name} ${user.family_name}`
+                  }
+                  email={user.email ?? ""}
+                  imageUrl={user.picture ?? ""}
+                />
+                <LogoutLink
+                  className={buttonVariants({
+                    variant: "ghost",
+                    size: "sm",
+                    className:
+                      "group transition-all hover:!bg-green-100  hover:outline hover:outline-1 hover:outline-green-600/20 ",
+                  })}
+                >
+                  <LogOut className="h-4 w-4 text-primary transition-transform group-hover:scale-105" />
+                </LogoutLink>
               </>
             )}
-
-            {/* logout */}
-            <LogoutLink
-              className={buttonVariants({
-                variant: "ghost",
-                size: "sm",
-                className:
-                  "transition-all hover:!bg-green-100  hover:outline hover:outline-1 hover:outline-green-600/20 ",
-              })}
-            >
-              Logout
-            </LogoutLink>
           </div>
         </div>
       </MaxWidthWrapper>
