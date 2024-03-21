@@ -21,8 +21,6 @@ const MobileNav = ({ isAuth, subscriptionPlan }: MobileNavProps) => {
 
   const toggleOpen = () => setOpen((prev) => !prev);
 
-  console.log(isOpen);
-
   const pathname = usePathname();
 
   useEffect(() => {
