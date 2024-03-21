@@ -30,7 +30,7 @@ const Navbar = async () => {
 
           <div className="hidden items-center space-x-4 sm:flex">
             <Link
-              href="/pricing"
+              href="/pricings"
               className={buttonVariants({
                 variant: "ghost",
                 size: "sm",
