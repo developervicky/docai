@@ -11,7 +11,8 @@ import { ArrowRight } from "lucide-react";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
 const Navbar = async () => {
-  const { isAuthenticated } = getKindeServerSession();
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
 
   return (
     <nav className="sticky inset-x-0 top-0 z-30 h-14 w-full border-b border-slate-200 bg-slate-100/75 backdrop-blur-lg transition-all">
@@ -29,8 +30,62 @@ const Navbar = async () => {
           {/* {todo:mobilenav} */}
 
           <div className="hidden items-center space-x-4 sm:flex">
-            <Link
-              href="/pricings"
+            {!user ? (
+              <>
+                <Link
+                  href="/pricings"
+                  className={buttonVariants({
+                    variant: "ghost",
+                    size: "sm",
+                    className:
+                      "transition-all hover:!bg-green-100  hover:outline hover:outline-1 hover:outline-green-600/20 ",
+                  })}
+                >
+                  Pricing
+                </Link>
+                {/* signin & register */}
+
+                <LoginLink
+                  className={buttonVariants({
+                    variant: "ghost",
+                    size: "sm",
+                    className:
+                      "transition-all hover:!bg-green-100  hover:outline hover:outline-1 hover:outline-green-600/20 ",
+                  })}
+                >
+                  Sign in
+                </LoginLink>
+
+                <RegisterLink
+                  className={buttonVariants({
+                    size: "sm",
+                    className:
+                      "group transition-transform  hover:!bg-green-600/90 ",
+                  })}
+                >
+                  Sign up
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-0.5" />
+                </RegisterLink>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/dashboard"
+                  className={buttonVariants({
+                    variant: "ghost",
+                    size: "sm",
+                    className:
+                      "transition-all hover:!bg-green-100  hover:outline hover:outline-1 hover:outline-green-600/20 ",
+                  })}
+                >
+                  Dashboard
+                </Link>
+                <UserAccountNav />
+              </>
+            )}
+
+            {/* logout */}
+            <LogoutLink
               className={buttonVariants({
                 variant: "ghost",
                 size: "sm",
@@ -38,45 +93,8 @@ const Navbar = async () => {
                   "transition-all hover:!bg-green-100  hover:outline hover:outline-1 hover:outline-green-600/20 ",
               })}
             >
-              Pricing
-            </Link>
-            {/* signin & register */}
-
-            <>
-              <LoginLink
-                className={buttonVariants({
-                  variant: "ghost",
-                  size: "sm",
-                  className:
-                    "transition-all hover:!bg-green-100  hover:outline hover:outline-1 hover:outline-green-600/20 ",
-                })}
-              >
-                Sign in
-              </LoginLink>
-
-              <RegisterLink
-                className={buttonVariants({
-                  size: "sm",
-                  className:
-                    "group transition-transform  hover:!bg-green-600/90 ",
-                })}
-              >
-                Sign up
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-0.5" />
-              </RegisterLink>
-
-              {/* logout */}
-              <LogoutLink
-                className={buttonVariants({
-                  variant: "ghost",
-                  size: "sm",
-                  className:
-                    "transition-all hover:!bg-green-100  hover:outline hover:outline-1 hover:outline-green-600/20 ",
-                })}
-              >
-                Logout
-              </LogoutLink>
-            </>
+              Logout
+            </LogoutLink>
           </div>
         </div>
       </MaxWidthWrapper>
