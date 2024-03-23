@@ -8,6 +8,7 @@ import { redirect } from "next/navigation";
 const page = async () => {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
+  console.log(user);
 
   if (!user || !user.id) redirect("/auth-callback?origin=dashboard");
 
@@ -19,7 +20,7 @@ const page = async () => {
 
   if (!dbUser) redirect("/auth-callback?origin=dashboard");
 
-  const subscriptionPlan = await getUserSubscriptionPlan()
+  const subscriptionPlan = await getUserSubscriptionPlan();
 
   return <Dashboard subscriptionPlan={subscriptionPlan} />;
 };

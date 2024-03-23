@@ -7,6 +7,7 @@ import Providers from "./components/Providers";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Toaster } from "@/components/ui/toaster";
 import "simplebar-react/dist/simplebar.min.css";
+import Footer from "@/components/Footer";
 
 const ibmMono = IBM_Plex_Mono({
   subsets: ["latin"],
@@ -28,12 +29,12 @@ export default function RootLayout({
     <html lang="en">
       <Providers>
         <body
-          
           className={cn("min-h-screen antialiased", ibmMono.className)}
         >
           <Navbar />
           {children}
           <Toaster />
+          <Footer />
         </body>
       </Providers>
     </html>
