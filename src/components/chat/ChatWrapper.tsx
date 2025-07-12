@@ -67,7 +67,7 @@ const ChatWrapper = ({ fileId }: ChatWrapperProps) => {
               pages per PDF.
             </p>
             <Link
-              href="/dasboard"
+              href="/dashboard"
               className={buttonVariants({
                 variant: "secondary",
                 className: "mt-4",
