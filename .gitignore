@@ -36,5 +36,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# claude.md
+# claude files
+.claude/
 CLAUDE.md
