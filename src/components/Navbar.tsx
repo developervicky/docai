@@ -11,11 +11,8 @@ import { ArrowRight, LogOut } from "lucide-react";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import UserAccountNav from "./UserAccountNav";
 import MobileNav from "./MobileNav";
-import { getUserSubscriptionPlan } from "@/lib/stripe";
-
 const Navbar = async () => {
   const { getUser } = getKindeServerSession();
-  const subscriptionPlan = await getUserSubscriptionPlan();
   const user = await getUser();
 
   return (
@@ -32,24 +29,11 @@ const Navbar = async () => {
             />
           </Link>
 
-          <MobileNav isAuth={!!user} subscriptionPlan={subscriptionPlan} />
+          <MobileNav isAuth={!!user} />
 
           <div className="hidden items-center space-x-4 sm:flex">
             {!user ? (
               <>
-                <Link
-                  href="/pricings"
-                  className={buttonVariants({
-                    variant: "ghost",
-                    size: "sm",
-                    className:
-                      "transition-all hover:!bg-green-100  hover:outline hover:outline-1 hover:outline-green-600/20 ",
-                  })}
-                >
-                  Pricing
-                </Link>
-                {/* signin & register */}
-
                 <LoginLink
                   className={buttonVariants({
                     variant: "ghost",
@@ -84,17 +68,6 @@ const Navbar = async () => {
                   })}
                 >
                   Dashboard
-                </Link>
-                <Link
-                  href="/pricings"
-                  className={buttonVariants({
-                    variant: "ghost",
-                    size: "sm",
-                    className:
-                      "transition-all hover:!bg-green-100  hover:outline hover:outline-1 hover:outline-green-600/20 ",
-                  })}
-                >
-                  Pricing
                 </Link>
 
                 <UserAccountNav

@@ -50,6 +50,12 @@ export const POST = async (req: NextRequest) => {
   });
 
   const results = await vectorStore.similaritySearch(message, 4);
+  
+  console.log(`Found ${results.length} similar documents for query: "${message}"`);
+  
+  if (results.length === 0) {
+    console.log(`No embeddings found for file ${file.id}. File might not be processed yet.`);
+  }
 
   const prevMessages = await db.message.findMany({
     where: {
@@ -91,7 +97,7 @@ export const POST = async (req: NextRequest) => {
   \n----------------\n
   
   CONTEXT:
-  ${results.map((r) => r.pageContent).join("\n\n")}
+  ${results.length > 0 ? results.map((r) => r.pageContent).join("\n\n") : "No relevant content found from the document. The document might still be processing or there was an error during processing."}
   
   USER INPUT: ${message}`,
       },

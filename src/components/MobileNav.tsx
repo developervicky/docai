@@ -1,22 +1,20 @@
 "use client";
 
-import { getUserSubscriptionPlan } from "@/lib/stripe";
 import {
   LoginLink,
   LogoutLink,
   RegisterLink,
 } from "@kinde-oss/kinde-auth-nextjs/components";
-import { ArrowRight, Gem, Menu } from "lucide-react";
+import { ArrowRight, Menu } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 interface MobileNavProps {
   isAuth: boolean;
-  subscriptionPlan: Awaited<ReturnType<typeof getUserSubscriptionPlan>>;
 }
 
-const MobileNav = ({ isAuth, subscriptionPlan }: MobileNavProps) => {
+const MobileNav = ({ isAuth }: MobileNavProps) => {
   const [isOpen, setOpen] = useState<boolean>(false);
 
   const toggleOpen = () => setOpen((prev) => !prev);
@@ -25,7 +23,7 @@ const MobileNav = ({ isAuth, subscriptionPlan }: MobileNavProps) => {
 
   useEffect(() => {
     if (isOpen) toggleOpen();
-  }, [pathname]);
+  }, [pathname, isOpen]);
 
   const closeOnCurrent = (href: string) => {
     if (pathname === href) {
@@ -63,16 +61,6 @@ const MobileNav = ({ isAuth, subscriptionPlan }: MobileNavProps) => {
                     Sign in
                   </LoginLink>
                 </li>
-                <li className="my-3 h-px w-full bg-slate-300" />
-                <li>
-                  <Link
-                    onClick={() => closeOnCurrent("/pricing")}
-                    className="flex w-full items-center font-semibold"
-                    href="/pricings"
-                  >
-                    Pricing
-                  </Link>
-                </li>
               </>
             ) : (
               <>
@@ -84,24 +72,6 @@ const MobileNav = ({ isAuth, subscriptionPlan }: MobileNavProps) => {
                   >
                     Dashboard
                   </Link>
-                </li>
-                <li className="my-3 h-px w-full bg-slate-300" />
-                <li>
-                  {subscriptionPlan.isSubscribed ? (
-                    <Link
-                      href="/dashboard/billing"
-                      className="flex w-full items-center font-semibold"
-                    >
-                      Manage Subscription
-                    </Link>
-                  ) : (
-                    <Link
-                      href="/pricings"
-                      className="flex w-full items-center font-semibold"
-                    >
-                      Upgrade <Gem className="ml-1.5 h-4 w-4 text-primary" />
-                    </Link>
-                  )}
                 </li>
                 <li className="my-3 h-px w-full bg-slate-300" />
                 <li>

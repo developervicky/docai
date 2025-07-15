@@ -1,4 +1,3 @@
-import { getUserSubscriptionPlan } from "@/lib/stripe";
 import {
   DropdownMenuTrigger,
   DropdownMenu,
@@ -11,7 +10,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Image from "next/image";
 import { Icons } from "./chat/Icons";
 import Link from "next/link";
-import { Gem } from "lucide-react";
 
 interface UserAccountNav {
   email: string | undefined;
@@ -19,8 +17,7 @@ interface UserAccountNav {
   name: string;
 }
 
-const UserAccountNav = async ({ email, imageUrl, name }: UserAccountNav) => {
-  const subscriptionPlan = await getUserSubscriptionPlan();
+const UserAccountNav = ({ email, imageUrl, name }: UserAccountNav) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="overflow-visible">
@@ -56,15 +53,6 @@ const UserAccountNav = async ({ email, imageUrl, name }: UserAccountNav) => {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link href="/dashboard/">Dashboard</Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          {subscriptionPlan.isSubscribed ? (
-            <Link href="/dashboard/billing">Manage Subscription</Link>
-          ) : (
-            <Link href="/pricings">
-              Upgrade <Gem className="ml-1.5 h-4 w-4 text-primary" />
-            </Link>
-          )}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

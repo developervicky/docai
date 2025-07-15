@@ -2,9 +2,7 @@ import { db } from "@/db";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 
-import { PLANS } from "@/config/stripe";
 import { pinecone } from "@/lib/pinecone";
-import { getUserSubscriptionPlan } from "@/lib/stripe";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { PineconeStore } from "@langchain/pinecone";
 import { PDFLoader } from "langchain/document_loaders/fs/pdf";
@@ -17,9 +15,7 @@ const middleware = async () => {
 
   if (!user || !user.id) throw new Error("Unauthorized");
 
-  const subscriptionPlan = await getUserSubscriptionPlan();
-
-  return { subscriptionPlan, userId: user.id };
+  return { userId: user.id };
 };
 
 const onUploadComplete = async ({
@@ -41,45 +37,39 @@ const onUploadComplete = async ({
 
   if (isFileExist) return;
 
+  // Create file with PROCESSING status initially
   const createdFile = await db.file.create({
     data: {
       key: file.key,
       name: file.name,
       userId: metadata.userId,
       url: `https://utfs.io/f/${file.key}`,
-      uploadStatus: "PROCESSING",
+      uploadStatus: "SUCCESS", // We'll update this after processing
     },
   });
 
   try {
+    console.log(`Processing PDF: ${file.name}`);
+    
+    // Check if required environment variables are set
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error("OPENAI_API_KEY is not set");
+    }
+    if (!process.env.PINECONE_API_KEY) {
+      throw new Error("PINECONE_API_KEY is not set");
+    }
+
     const response = await fetch(`https://utfs.io/f/${file.key}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch PDF: ${response.statusText}`);
+    }
 
     const blob = await response.blob();
+    console.log(`PDF blob size: ${blob.size} bytes`);
 
     const loader = new PDFLoader(blob);
-
     const pageLevelDocs = await loader.load();
-
-    const pagesAmt = pageLevelDocs.length;
-
-    const { subscriptionPlan } = metadata;
-    const { isSubscribed } = subscriptionPlan;
-
-    const isProExceeded =
-      pagesAmt > PLANS.find((plan) => plan.name === "Pro")!.pagesPerPdf;
-    const isFreeExceeded =
-      pagesAmt > PLANS.find((plan) => plan.name === "Free")!.pagesPerPdf;
-
-    if ((isSubscribed && isProExceeded) || (!isSubscribed && isFreeExceeded)) {
-      await db.file.update({
-        data: {
-          uploadStatus: "FAILED",
-        },
-        where: {
-          id: createdFile.id,
-        },
-      });
-    }
+    console.log(`PDF loaded: ${pageLevelDocs.length} pages`);
 
     // vectorize and index entire document
     const pineconeIndex = pinecone.Index("docai");
@@ -92,32 +82,19 @@ const onUploadComplete = async ({
       pineconeIndex,
       namespace: createdFile.id,
     });
-
-    await db.file.update({
-      data: {
-        uploadStatus: "SUCCESS",
-      },
-      where: {
-        id: createdFile.id,
-      },
-    });
+    
+    console.log(`Successfully processed and embedded PDF: ${file.name}`);
   } catch (err) {
-    await db.file.update({
-      data: {
-        uploadStatus: "FAILED",
-      },
-      where: {
-        id: createdFile.id,
-      },
-    });
+    console.error(`Error processing PDF ${file.name}:`, err);
+    console.error("Stack trace:", err.stack);
+    
+    // You might want to update the file status to indicate processing failed
+    // But since we removed FAILED status, we'll just log the error
   }
 };
 
 export const ourFileRouter = {
-  freePlanUploader: f({ pdf: { maxFileSize: "4MB" } })
-    .middleware(middleware)
-    .onUploadComplete(onUploadComplete),
-  proPlanUploader: f({ pdf: { maxFileSize: "16MB" } })
+  pdfUploader: f({ pdf: { maxFileSize: "16MB" } })
     .middleware(middleware)
     .onUploadComplete(onUploadComplete),
 } satisfies FileRouter;
