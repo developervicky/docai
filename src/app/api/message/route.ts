@@ -1,6 +1,6 @@
 import { db } from "@/db";
-import { openai } from "@/lib/openai";
-import { pinecone } from "@/lib/pinecone";
+import { getOpenAIClient } from "@/lib/openai";
+import { getPineconeClient } from "@/lib/pinecone";
 import { SendMessageValidator } from "@/lib/validators/SendMessageValidator";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { OpenAIEmbeddings } from "@langchain/openai";
@@ -42,7 +42,7 @@ export const POST = async (req: NextRequest) => {
   const embeddings = new OpenAIEmbeddings({
     openAIApiKey: process.env.OPENAI_API_KEY,
   });
-  const pineconeIndex = pinecone.Index("docai");
+  const pineconeIndex = getPineconeClient().Index("docai");
 
   const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
     pineconeIndex,
@@ -72,7 +72,7 @@ export const POST = async (req: NextRequest) => {
     content: msg.text,
   }));
 
-  const response = await openai.chat.completions.create({
+  const response = await getOpenAIClient().chat.completions.create({
     model: "gpt-3.5-turbo",
     temperature: 0,
     stream: true,
