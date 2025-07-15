@@ -50,7 +50,7 @@ const onUploadComplete = async ({
 
   try {
     console.log(`Processing PDF: ${file.name}`);
-    
+
     // Check if required environment variables are set
     if (!process.env.OPENAI_API_KEY) {
       throw new Error("OPENAI_API_KEY is not set");
@@ -82,12 +82,16 @@ const onUploadComplete = async ({
       pineconeIndex,
       namespace: createdFile.id,
     });
-    
+
     console.log(`Successfully processed and embedded PDF: ${file.name}`);
   } catch (err) {
     console.error(`Error processing PDF ${file.name}:`, err);
-    console.error("Stack trace:", err.stack);
-    
+
+    // Handle error with proper type checking
+    if (err instanceof Error) {
+      console.error("Stack trace:", err.stack);
+    }
+
     // You might want to update the file status to indicate processing failed
     // But since we removed FAILED status, we'll just log the error
   }
